@@ -1,80 +1,70 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Accessibility Widget — VSCode style</title>
-<style>
-  /* Theme estilo VSCode (escuro) */
-  :root{
-    --bg:#0f1720;
-    --panel:#11151b;
-    --muted:#9aa4b2;
-    --accent:#2a8cff;
-    --accent-2:#6ad1ff;
-    --glass: rgba(255,255,255,0.03);
-    --radius:12px;
-    --shadow: 0 6px 18px rgba(2,6,23,0.7);
-    --gap:12px;
-    --z:1000;
-  }
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,#05060a 0%, #0b0f14 100%);font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;color:#e6eef8}
-  /* container demo */
-  .app{
-    min-height:100vh;
-    padding:40px;
-    box-sizing:border-box;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Widget Acessibilidade</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <h1>Widget de Acessibilidade</h1>
+    <p>Teste mudar posição, abrir menu e usar atalhos (Ctrl+M).</p>
 
-  /* floating accessibility widget */
-  .a11y {
-    position:fixed;
-    z-index:var(--z);
-    display:flex;
-    gap:8px;
-    align-items:center;
-    font-size:14px;
-    transition:transform .18s ease, right .12s ease, left .12s ease, top .12s ease, bottom .12s ease;
-  }
+    <div style="margin-top:20px;color:var(--muted)">
+      <label>
+        Posição demo:
+        <select id="demoPos">
+          <option value="pos-bottom-right">Bottom right</option>
+          <option value="pos-bottom-left">Bottom left</option>
+          <option value="pos-top-right">Top right</option>
+          <option value="pos-top-left">Top left</option>
+        </select>
+      </label>
+    </div>
+  </div>
 
-  /* positions (switch by adding class) */
-  .pos-bottom-right { right:24px; bottom:24px; flex-direction:row-reverse; }
-  .pos-bottom-left  { left:24px;  bottom:24px; }
-  .pos-top-right    { right:24px; top:24px; flex-direction:row-reverse; }
-  .pos-top-left     { left:24px; top:24px; }
+  <!-- Widget -->
+  <div id="a11y" class="a11y pos-bottom-right" aria-live="polite">
+    <div class="panel" id="panel" role="group" aria-label="Controles de acessibilidade">
+      <button id="a11yBtn"
+        class="a11y-button"
+        aria-haspopup="true"
+        aria-controls="menu"
+        aria-expanded="false"
+        title="Opções de acessibilidade"
+      >
+        <!-- Ícone -->
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v4"></path>
+          <path d="M5 8l3 3"></path>
+          <path d="M19 8l-3 3"></path>
+          <circle cx="12" cy="14" r="6"></circle>
+        </svg>
+        <span class="sr-only">Abrir menu de acessibilidade</span>
+      </button>
 
-  .a11y .panel {
-    background:var(--panel);
-    border-radius:var(--radius);
-    padding:8px;
-    box-shadow:var(--shadow);
-    display:flex;
-    gap:8px;
-    align-items:center;
-    border:1px solid rgba(255,255,255,0.03);
-  }
+      <div class="a11y-label">Acessibilidade</div>
 
-  /* main button (like VSCode accessibility button) */
-  .a11y-button {
-    background:linear-gradient(180deg,var(--glass), transparent);
-    border:none;
-    color:var(--accent-2);
-    width:44px;height:44px;
-    display:inline-grid;
-    place-items:center;
-    border-radius:10px;
-    cursor:pointer;
-    outline:none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5) inset;
-    transition:transform .12s, box-shadow .12s;
-  }
-  .a11y-button:focus { box-shadow:0 4px 18px rgba(42,140,255,0.18); transform:translateY(-2px); }
-  .a11y-button:hover { transform:translateY(-2px); }
+      <div id="menu" class="menu-pop" role="menu" aria-hidden="true">
+        <button role="menuitem" tabindex="-1" data-action="high-contrast">Toggle high contrast</button>
+        <button role="menuitem" tabindex="-1" data-action="big-text">Toggle large text</button>
 
-  /* label next to button (hidden on small widths) */
-  .a11y-label{
-    color:var(--muted);
-    margin-right:8px;
-    user-select:none;
-  }
-  @media (max-width:480px){ .a11y-label }
+        <div class="menu-row" role="none">
+          <label for="positionSelect" style="color:var(--muted)">Posição</label>
+          <select id="positionSelect" aria-label="Mudar posição do widget">
+            <option value="pos-bottom-right">Bottom right</option>
+            <option value="pos-bottom-left">Bottom left</option>
+            <option value="pos-top-right">Top right</option>
+            <option value="pos-top-left">Top left</option>
+          </select>
+        </div>
+
+        <button id="closeMenu" role="menuitem" tabindex="-1">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
